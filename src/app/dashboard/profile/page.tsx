@@ -182,17 +182,31 @@ export default function ProfilePage() {
         }
     };
 
-    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                handleAvatarChange(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+    import { storage } from "@/src/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && user) {
+        try {
+            // Cria referência no Storage
+            const storageRef = ref(storage, `profileImages/${user.uid}/${file.name}`);
+            // Faz upload
+            await uploadBytes(storageRef, file);
+            // Pega a URL pública
+            const url = await getDownloadURL(storageRef);
+            // Atualiza o perfil no Auth e Firestore
+            await updateProfile(user, { photoURL: url });
+            const userDocRef = doc(db, 'users', user.uid);
+            await setDoc(userDocRef, { avatarUrl: url }, { merge: true });
+            setProfileData(prev => ({ ...prev, avatarUrl: url }));
+            toast({ title: "Foto de perfil atualizada!" });
+        } catch (error) {
+            toast({ variant: 'destructive', title: "Erro ao salvar foto", description: "Não foi possível salvar a foto." });
         }
-        if(event.target) event.target.value = '';
-    };
+    }
+    if(event.target) event.target.value = '';
+};
 
     if (loading) {
         return (
