@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth, db } from "@/lib/firebase";
+import { auth, db } from "@/firebase";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { signOut } from "@/services/auth";

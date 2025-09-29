@@ -16,7 +16,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, storage } from '@/firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { onAuthStateChanged, User as FirebaseUser, updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -55,7 +56,7 @@ export default function ProfilePage() {
         personalTrainer: "",
         nutritionist: "",
     });
-    
+
     const [isProfileComplete, setIsProfileComplete] = useState(true);
     const [loading, setLoading] = useState(true);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -88,10 +89,10 @@ export default function ProfilePage() {
                         personalTrainer: dbData.personalTrainer || "",
                         nutritionist: dbData.nutritionist || "",
                     });
-                    
+
                     const profileComplete = !!(age && height && weight);
                     setIsProfileComplete(profileComplete);
-                    if(!profileComplete) {
+                    if (!profileComplete) {
                         setIsEditMode(true);
                     }
 
@@ -160,7 +161,7 @@ export default function ProfilePage() {
             setIsEditMode(false);
             const profileComplete = !!(profileData.age && profileData.height && profileData.weight);
             setIsProfileComplete(profileComplete);
-            if(profileComplete){
+            if (profileComplete) {
                 router.push('/dashboard/home');
             }
 
@@ -182,31 +183,28 @@ export default function ProfilePage() {
         }
     };
 
-    import { storage } from "@/src/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && user) {
-        try {
-            // Cria referência no Storage
-            const storageRef = ref(storage, `profileImages/${user.uid}/${file.name}`);
-            // Faz upload
-            await uploadBytes(storageRef, file);
-            // Pega a URL pública
-            const url = await getDownloadURL(storageRef);
-            // Atualiza o perfil no Auth e Firestore
-            await updateProfile(user, { photoURL: url });
-            const userDocRef = doc(db, 'users', user.uid);
-            await setDoc(userDocRef, { avatarUrl: url }, { merge: true });
-            setProfileData(prev => ({ ...prev, avatarUrl: url }));
-            toast({ title: "Foto de perfil atualizada!" });
-        } catch (error) {
-            toast({ variant: 'destructive', title: "Erro ao salvar foto", description: "Não foi possível salvar a foto." });
+    const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file && user) {
+            try {
+                const storageRef = ref(storage, `profileImages/${user.uid}/${file.name}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                await updateProfile(user, { photoURL: url });
+                const userDocRef = doc(db, "users", user.uid);
+                await setDoc(userDocRef, { avatarUrl: url }, { merge: true });
+                setProfileData((prev) => ({ ...prev, avatarUrl: url }));
+                toast({ title: "Foto de perfil atualizada!" });
+            } catch (error) {
+                toast({
+                    variant: "destructive",
+                    title: "Erro ao salvar foto",
+                    description: "Não foi possível salvar a foto.",
+                });
+            }
         }
-    }
-    if(event.target) event.target.value = '';
-};
+        if (event.target) event.target.value = "";
+    };
 
     if (loading) {
         return (
@@ -223,7 +221,6 @@ const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
             </div>
         );
     }
-
     return (
         <>
             <input
@@ -251,14 +248,14 @@ const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold">Meu Perfil</h2>
                     {!isProfileComplete && isEditMode && (
-                         <Button variant="ghost" onClick={() => router.push('/dashboard/home')}>
+                        <Button variant="ghost" onClick={() => router.push('/dashboard/home')}>
                             Deixar para depois <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     )}
                 </div>
 
                 {!isProfileComplete && isEditMode && (
-                     <Card className="mb-6 bg-blue-50 border-blue-200">
+                    <Card className="mb-6 bg-blue-50 border-blue-200">
                         <CardHeader>
                             <CardTitle className="text-blue-800">Complete seu Perfil</CardTitle>
                             <CardDescription className="text-blue-700">

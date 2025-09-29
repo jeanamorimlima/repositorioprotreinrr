@@ -102,7 +102,7 @@ const RankingContent = ({ type }: { type: 'Personal Trainer' | 'Nutricionista' }
     const filteredHallOfFame = Object.entries(hallOfFame).reduce((acc, [month, professionals]) => {
         const filtered = professionals.filter(p => p.type === type).sort((a,b) => b.points - a.points);
         if(filtered.length > 0) {
-            acc[month] = filtered;
+           (acc as any)[month] = filtered;
         }
         return acc;
     }, {} as typeof hallOfFame);

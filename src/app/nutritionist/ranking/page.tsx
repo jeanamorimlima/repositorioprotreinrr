@@ -100,12 +100,12 @@ const RankingContent = ({ type }: { type: 'Personal Trainer' | 'Nutricionista' }
     const tenthPlacePoints = getTenthPlacePoints(filteredRanking);
 
     const filteredHallOfFame = Object.entries(hallOfFame).reduce((acc, [month, professionals]) => {
-        const filtered = professionals.filter(p => p.type === type).sort((a,b) => b.points - a.points);
-        if(filtered.length > 0) {
-            acc[month] = filtered;
-        }
-        return acc;
-    }, {} as typeof hallOfFame);
+    const filtered = (professionals as any[]).filter((p: any) => p.type === type).sort((a: any, b: any) => b.points - a.points);
+    if(filtered.length > 0) {
+        acc[month] = filtered;
+    }
+    return acc;
+}, {} as { [key: string]: any[] });
 
     return (
         <div className="space-y-6">

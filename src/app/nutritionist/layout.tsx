@@ -8,7 +8,7 @@ import Link from "next/link";
 import { NutritionistBottomNavbar } from "@/components/nutritionist-bottom-navbar";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { signOut as firebaseSignOut } from "@/services/auth";

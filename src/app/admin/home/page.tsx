@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import DashboardClient, { DashboardStats } from "./dashboard-client";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/firebase";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 

@@ -8,7 +8,7 @@ import { Dumbbell, ArrowRight, TrendingUp, Sparkles, UserSearch, ClipboardList, 
 import Image from "next/image";
 import Link from "next/link";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/firebase";
 
 
 const latestCampaigns: any[] = [];

@@ -14,7 +14,21 @@ import { cn } from '@/lib/utils';
 
 // Mock data - em uma aplicação real, isso viria do backend
 const mockRanking: any[] = [];
-const hallOfFame: any = {};
+// ...seus imports...
+
+type Professional = {
+  points: number;
+  id: string;
+  name: string;
+  type: string;
+  avatarUrl: string;
+  position: number;
+};
+
+const hallOfFame: Record<string, Professional[]> = {
+  "Julho 2024": [],
+  "Junho 2024": [],
+};
 
 const getTenthPlacePoints = (professionals: any[]) => {
     if (professionals.length < 10) return 0;
@@ -87,13 +101,19 @@ const RankingContent = ({ type }: { type: 'Personal Trainer' | 'Nutricionista' }
 
     const tenthPlacePoints = getTenthPlacePoints(filteredRanking);
 
-    const filteredHallOfFame = Object.entries(hallOfFame).reduce((acc, [month, professionals]) => {
-        const filtered = professionals.filter((p: any) => p.type === type).sort((a: any,b: any) => b.points - a.points);
-        if(filtered.length > 0) {
-            acc[month] = filtered;
-        }
-        return acc;
-    }, {} as typeof hallOfFame);
+    const filteredHallOfFame = Object.entries(hallOfFame).reduce<Record<string, any[]>>(
+  (acc, [month, professionals]) => {
+    const filtered = (professionals as any[])
+      .filter((p: any) => p.type === type)
+      .sort((a: any, b: any) => b.points - a.points);
+
+    if (filtered.length > 0) {
+      acc[month] = filtered;
+    }
+    return acc;
+  },
+  {}
+);
 
     return (
         <div className="space-y-6">

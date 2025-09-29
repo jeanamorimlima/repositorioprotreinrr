@@ -5,10 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Users, ShieldCheck, LifeBuoy, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { signOut } from "@/services/auth";
 import { useToast } from "@/hooks/use-toast";
-import { Logo } from "../logo";
+import { Logo } from "@/components/logo";
 
 const navItems = [
     { href: "/admin/home", icon: Home, label: "Dashboard" },

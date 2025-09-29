@@ -1,7 +1,7 @@
 
 'use server';
 
-import { auth, db } from '@/lib/firebase';
+import { auth, db } from '@/firebase';
 import { 
     createUserWithEmailAndPassword, 
     sendEmailVerification,

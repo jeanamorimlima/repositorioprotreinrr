@@ -8,7 +8,7 @@ import Link from "next/link";
 import { BottomNavbar } from "@/components/bottom-navbar";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
+import { auth, db } from "@/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";

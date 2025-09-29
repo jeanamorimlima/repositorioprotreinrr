@@ -469,15 +469,21 @@ export default function NutritionistCampaignsPage() {
                                 <div className="space-y-2 mt-4">
                                     <Label>Link do Grupo de WhatsApp</Label>
                                     <div className="flex items-center space-x-2">
-                                        <Input value={campaign.whatsappGroupUrl} readOnly />
-                                        <Button size="icon" variant="outline" onClick={() => copyToClipboard(campaign.whatsappGroupUrl)}>
-                                            {hasCopied ? <Check className="text-green-500" /> : <Copy />}
-                                        </Button>
-                                         <a href={campaign.whatsappGroupUrl} target="_blank" rel="noopener noreferrer">
-                                            <Button size="icon">
-                                                <LinkIcon />
-                                            </Button>
-                                        </a>
+                                       <Input value={campaign.whatsappGroupUrl ?? ""} readOnly />
+
+<Button
+  size="icon"
+  variant="outline"
+  onClick={() => copyToClipboard(campaign.whatsappGroupUrl ?? "")}
+>
+  {hasCopied ? <Check className="text-green-500" /> : <Copy />}
+</Button>
+
+<a href={campaign.whatsappGroupUrl ?? "#"} target="_blank" rel="noopener noreferrer">
+  Acessar grupo
+</a>
+
+
                                     </div>
                                 </div>
                             )}

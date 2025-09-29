@@ -559,7 +559,7 @@ export default function CampaignsPage() {
                                     <Label>Link do Grupo de WhatsApp</Label>
                                     <div className="flex items-center space-x-2">
                                         <Input value={campaign.whatsappGroupUrl} readOnly />
-                                        <Button size="icon" variant="outline" onClick={() => copyToClipboard(campaign.whatsappGroupUrl)}>
+                                        <Button size="icon" variant="outline" onClick={() => copyToClipboard(campaign.whatsappGroupUrl ?? "")}>
                                             {hasCopied ? <Check className="text-green-500" /> : <Copy />}
                                         </Button>
                                          <a href={campaign.whatsappGroupUrl} target="_blank" rel="noopener noreferrer">
